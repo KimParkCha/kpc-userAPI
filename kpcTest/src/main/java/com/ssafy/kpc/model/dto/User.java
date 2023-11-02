@@ -3,22 +3,30 @@ package com.ssafy.kpc.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
 @Getter @Setter
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
-    private String userName;
-    private String userPwd;
-    private String emailId;
-    private String emailDomain;
-    private String joinDate;
+    @Column(unique = true)
+    private String name;
+    private String password;
+
+    @Column(unique = true)
+    private String email;
+
+    @CreatedDate
+    private LocalDateTime joinDate;
 
 }

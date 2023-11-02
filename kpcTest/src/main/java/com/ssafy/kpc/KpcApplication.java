@@ -7,6 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class KpcApplication {
 
 	public static void main(String[] args) {
+
+
+
 		SpringApplication.run(KpcApplication.class, args);
 	}
 
