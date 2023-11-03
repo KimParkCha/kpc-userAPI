@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.lang.reflect.Member;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,6 +24,8 @@ public class UserRepository {
         return em.find(User.class , id);
     }
 
+//    public User findOneEmail(String email) {return em.find(User.class, email);}
+
     public List<User> findAll(){
         return em.createQuery("select u from User u", User.class)
                 .getResultList();
@@ -31,6 +35,12 @@ public class UserRepository {
         return em.createQuery("select u from User u where u.name = :name", User.class)
                 .setParameter("name", name)
                 .getResultList();
+    }
+
+    public Optional<User> findByEmail(String email){
+        return em.createQuery("select u from User u where u.email = :email", User.class)
+                .setParameter("email", email)
+                .getResultList().stream().findAny();
     }
 
 

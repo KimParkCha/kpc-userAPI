@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,6 +37,11 @@ public class UserServiceImpl implements UserService{
 
     public User findOne(Long userId){
         return userRepository.findOne(userId);
+    }
+
+    @Override
+    public Optional<User> login(String email, String password) {
+        return userRepository.findByEmail(email);
     }
 
 }
