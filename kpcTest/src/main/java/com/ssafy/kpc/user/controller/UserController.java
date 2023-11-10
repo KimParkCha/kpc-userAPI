@@ -1,17 +1,14 @@
-package com.ssafy.kpc.controller;
+package com.ssafy.kpc.user.controller;
 
-import com.ssafy.kpc.model.dto.User;
-import com.ssafy.kpc.model.service.UserService;
-import com.ssafy.kpc.model.service.UserServiceImpl;
+import com.ssafy.kpc.user.model.entity.User;
+import com.ssafy.kpc.user.model.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,18 +17,16 @@ public class UserController {
 
     private final UserService userService;
 
+//    @GetMapping("/")
+//    public ResponseEntity Hello (@RequestBody User user){
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+
     @PostMapping(value = "/user/register")
     public ResponseEntity<User> register(@RequestBody User user){
-//        User user = new User();
-//        user.setName(name);
-//        user.setPassword(password);
-//        user.setEmail(email);
-        Long userId = userService.join(user);
-        if(userService.findOne(userId).equals(user)){
-            return new ResponseEntity<User>(user, HttpStatus.OK);
-        } else{
-            return new ResponseEntity<User>(user, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        System.out.println("register Controller 실행");
+        userService.join(user);
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
     @PostMapping(value = "/user/login")
@@ -45,6 +40,16 @@ public class UserController {
         } else{
             System.out.println("로그인 실패");
             return new ResponseEntity<User>(user, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(value = "/user/detailUser/{user_id}")
+    public ResponseEntity<User> getUser(@PathVariable int user_id) {
+        Long id = Long.valueOf(user_id);
+        if(userService.getUser(id).isPresent()){
+            return new ResponseEntity<User>(userService.getUser(id).get(), HttpStatus.OK);
+        } else{
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
     }
 

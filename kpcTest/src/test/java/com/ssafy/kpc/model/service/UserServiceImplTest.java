@@ -1,12 +1,12 @@
 package com.ssafy.kpc.model.service;
 
-import com.ssafy.kpc.model.dto.User;
-import com.ssafy.kpc.model.repository.UserRepository;
+import com.ssafy.kpc.user.model.entity.User;
+import com.ssafy.kpc.user.model.repository.UserRepository;
+import com.ssafy.kpc.user.model.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 

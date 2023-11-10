@@ -1,9 +1,8 @@
-package com.ssafy.kpc.model.service;
+package com.ssafy.kpc.user.model.service;
 
-import com.ssafy.kpc.model.dto.User;
-import com.ssafy.kpc.model.repository.UserRepository;
+import com.ssafy.kpc.user.model.entity.User;
+import com.ssafy.kpc.user.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,15 +12,14 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserService {
 
     private final UserRepository userRepository;
 
     @Transactional
-    public Long join(User user){
+    public void join(User user){
         validateDuplicateMember(user);
         userRepository.save(user);
-        return user.getId();
     }
 
     private void validateDuplicateMember(User user) {
@@ -35,13 +33,15 @@ public class UserServiceImpl implements UserService{
         return userRepository.findAll();
     }
 
-    public User findOne(Long userId){
-        return userRepository.findOne(userId);
+    public Optional<User> findById(Long userId){
+        return userRepository.findById(userId);
     }
 
-    @Override
     public Optional<User> login(String email, String password) {
         return userRepository.findByEmail(email);
     }
 
+    public Optional<User> getUser(Long id){
+        return userRepository.findById(id);
+    }
 }
