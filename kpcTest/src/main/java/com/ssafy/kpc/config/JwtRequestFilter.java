@@ -48,14 +48,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String jwt = null;
         String refreshJwt = null;
         String refreshUname = null;
-
+        System.out.println("-----------jwtToken = " + jwtToken);
         try{
             if(jwtToken != null){
                 jwt = jwtToken.getValue();
                 userEmail = jwtUtil.getUserEmail(jwt);
+                System.out.println("userEmail = " + userEmail);
             }
             if(userEmail!=null){
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+                System.out.println("userDetails = " + userDetails);
 
                 if(jwtUtil.validateToken(jwt,userDetails)){
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
@@ -65,6 +67,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }catch (ExpiredJwtException e){
             Cookie refreshToken = cookieUtil.getCookie(httpServletRequest, JwtUtil.REFRESH_TOKEN_NAME);
+            System.out.println(" catch refreshToken = " + refreshToken);
             if(refreshToken!=null){
                 refreshJwt = refreshToken.getValue();
             }
@@ -75,7 +78,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         try{
             if(refreshJwt != null){
                 refreshUname = redisUtil.getData(refreshJwt);
-
+                System.out.println("-- redis refreshUname = " + refreshUname);
                 if(refreshUname.equals(jwtUtil.getUserEmail(refreshJwt))){
                     UserDetails userDetails = userDetailsService.loadUserByUsername(refreshUname);
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
@@ -91,9 +94,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 }
             }
         }catch(ExpiredJwtException e){
-
+            e.printStackTrace();
         }
-
+        System.out.println("jwtToken = " + jwtToken);
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }
 }

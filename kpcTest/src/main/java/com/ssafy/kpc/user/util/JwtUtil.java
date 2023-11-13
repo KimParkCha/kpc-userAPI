@@ -57,8 +57,11 @@ public class JwtUtil {
     }
 
     public String doGenerateToken(String email, long expireTime) {
-
+        System.out.println("doGenerateToken()");
+        Claims claims2 = Jwts.claims();
         Claims claims = Jwts.claims();
+        System.out.println("claims");
+
         claims.put("email", email);
 
         String jwt = Jwts.builder()
@@ -67,7 +70,8 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + expireTime))
                 .signWith(getSigningKey(SECRET_KEY), SignatureAlgorithm.HS256)
                 .compact();
-
+        System.out.println("----- = ");
+        System.out.println("jwt = " + jwt);
         return jwt;
     }
 

@@ -43,6 +43,23 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    @Override
+    public User loginUser(String email, String password) throws Exception{
+        User user = userRepository.findByEmail(email);
+        if(user==null) throw new Exception ("멤버가 조회되지 않음");
+        String salt = user.getSalt().getSalt();
+        System.out.println("salt = " + salt);
+        password = saltUtil.encodePassword(salt,password);
+        if(!user.getPassword().equals(password))
+            throw new Exception ("비밀번호가 틀립니다.");
+        System.out.println("user.getId() = " + user.getId());
+        System.out.println("user.getName() = " + user.getName());
+        System.out.println("user.getEmail() = " + user.getEmail());
+        System.out.println("user.getPassword() = " + user.getPassword());
+        System.out.println("user.getAddress() = " + user.getAddress());
+        return user;
+    }
+
     public List<User> findUsers(){
         return userRepository.findAll();
     }
@@ -51,16 +68,7 @@ public class UserServiceImpl implements UserService{
         return userRepository.findById(userId);
     }
 
-    @Override
-    public User loginUser(String email, String password) throws Exception{
-        User user = userRepository.findByEmail(email);
-        if(user==null) throw new Exception ("멤버가 조회되지 않음");
-        String salt = user.getSalt().getSalt();
-        password = saltUtil.encodePassword(salt,password);
-        if(!user.getPassword().equals(password))
-            throw new Exception ("비밀번호가 틀립니다.");
-        return user;
-    }
+
 
     public Optional<User> getUser(Long id){
         return userRepository.findById(id);
