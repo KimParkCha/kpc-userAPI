@@ -42,9 +42,10 @@ public class UserController {
         try {
             System.out.println("register Controller 실행");
             userService.registUser(user);
-            return new Response("success", "회원가입을 성공적으로 완료했습니다.", null, null);
+
+            return new Response(user,"success", "회원가입을 성공적으로 완료했습니다.", null, null);
         } catch (Exception e) {
-            return new Response("error", "회원가입을 하는 도중 오류가 발생했습니다.", null, null);
+            return new Response(null,"error", "회원가입을 하는 도중 오류가 발생했습니다.", null, null);
         }
     }
 
@@ -54,32 +55,31 @@ public class UserController {
             System.out.println("loginUserController");
             User user = userService.loginUser(userDto.getEmail(), userDto.getPassword());
             System.out.println("1 = " + 1);
-//            final String token = jwtUtil.generateToken(user);
-//            System.out.println("2 = " + 2);
-//            final String refreshJwt = jwtUtil.generateRefreshToken(user);
-//            System.out.println("3 = " + 3);
-//            System.out.println("refreshJwt = " + refreshJwt);
-//            Cookie accessToken = cookieUtil.createCookie(JwtUtil.ACCESS_TOKEN_NAME, token);
-//            Cookie refreshToken = cookieUtil.createCookie(JwtUtil.REFRESH_TOKEN_NAME, refreshJwt);
+            final String token = jwtUtil.generateToken(user);
+            System.out.println("2 = " + 2);
+            final String refreshJwt = jwtUtil.generateRefreshToken(user);
+            System.out.println("3 = " + 3);
+            System.out.println("refreshJwt = " + refreshJwt);
+            Cookie accessToken = cookieUtil.createCookie(JwtUtil.ACCESS_TOKEN_NAME, token);
+            Cookie refreshToken = cookieUtil.createCookie(JwtUtil.REFRESH_TOKEN_NAME, refreshJwt);
 
-//            System.out.println("token = " + token);
+            System.out.println("accessToken = " + accessToken.getValue());
+            System.out.println("refreshToken = " + refreshToken.getValue());
 //            redisUtil.setDataExpire(refreshJwt, user.getName(), JwtUtil.REFRESH_TOKEN_VALIDATION_SECOND);
-//            res.addCookie(accessToken);
-//            res.addCookie(refreshToken);
-
+            res.addCookie(accessToken);
+            res.addCookie(refreshToken);
 //            return new ResponseEntity<MemberDto>("success", "로그인에 성공했습니다.", token);
-            return new Response("success", "로그인에 성공했습니다.", "accesstoken", "refreshtoken");
+            return new Response(user, "success", "로그인에 성공했습니다.", accessToken.getValue(), refreshToken.getValue());
         } catch (Exception e) {
-            return new Response("error", "로그인에 실패했습니다.", e.getMessage(), "null");
+            return new Response(null,"error", "로그인 정보가 맞지 않습니다!", e.getMessage(), null);
         }
     }
 
     @GetMapping(value = "/detailUser/{email}")
-    public ResponseEntity<User> getfindByEmailUser(@PathVariable("email") String email) {
-        System.out.println("email = " + email);
-        if(userService.getUser(email) != null){
-            System.out.println(userService.getUser(email).getId());
-            return new ResponseEntity<User>(userService.getUser(email), HttpStatus.OK);
+    public ResponseEntity<User> getUser(@PathVariable String email) {
+
+        if(userService.getUserEmail(email) != null){
+            return new ResponseEntity<User>(userService.getUserEmail(email), HttpStatus.OK);
         } else{
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }

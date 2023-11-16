@@ -50,8 +50,11 @@ public class UserServiceImpl implements UserService{
         String salt = user.getSalt().getSalt();
         System.out.println("salt = " + salt);
         password = saltUtil.encodePassword(salt,password);
-        if(!user.getPassword().equals(password))
+        System.out.println("password : " + password);
+        System.out.println("저장된 passoword" + user.getPassword());
+        if(!user.getPassword().equals(password)){
             throw new Exception ("비밀번호가 틀립니다.");
+        }
         System.out.println("user.getId() = " + user.getId());
         System.out.println("user.getName() = " + user.getName());
         System.out.println("user.getEmail() = " + user.getEmail());
@@ -68,9 +71,7 @@ public class UserServiceImpl implements UserService{
         return userRepository.findById(userId);
     }
 
-
-
-    public User getUser(String email){
+    public User getUserEmail(String email){
         return userRepository.findByEmail(email);
     }
 

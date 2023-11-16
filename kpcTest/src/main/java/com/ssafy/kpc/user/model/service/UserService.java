@@ -9,7 +9,6 @@ public interface UserService {
     void registUser(User user);
 
     User loginUser(String email, String password) throws Exception;
-
-    public User getUser(String email);
+    public User getUserEmail(String email);
 }
 

@@ -1,7 +1,6 @@
 package com.ssafy.kpc.house.controller;
 
-import com.ssafy.kpc.house.model.dto.RegionDto;
-import com.ssafy.kpc.house.model.entity.Region;
+import com.ssafy.kpc.house.model.entity.region.Region;
 import com.ssafy.kpc.house.model.service.RegionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

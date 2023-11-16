@@ -57,10 +57,9 @@ public class JwtUtil {
     }
 
     public String doGenerateToken(String email, long expireTime) {
-        System.out.println("doGenerateToken()" + email + " " + expireTime);
-
-        return  Jwts.builder()
-                .claim("username", email)
+        System.out.println("doGenerateToken()");
+        return Jwts.builder()
+                .claim("email", email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expireTime))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)

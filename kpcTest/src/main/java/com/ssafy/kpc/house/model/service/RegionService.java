@@ -1,7 +1,6 @@
 package com.ssafy.kpc.house.model.service;
 
-import com.ssafy.kpc.house.model.dto.RegionDto;
-import com.ssafy.kpc.house.model.entity.Region;
+import com.ssafy.kpc.house.model.entity.region.Region;
 import com.ssafy.kpc.house.model.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
