@@ -1,7 +1,6 @@
 package com.ssafy.kpc.house.model.repository;
 
-import com.ssafy.kpc.house.model.dto.RegionDto;
-import com.ssafy.kpc.house.model.entity.Region;
+import com.ssafy.kpc.house.model.entity.region.Region;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

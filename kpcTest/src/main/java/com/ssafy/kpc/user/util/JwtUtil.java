@@ -32,7 +32,7 @@ public class JwtUtil {
     }
 
     public Claims extractAllClaims(String token) throws ExpiredJwtException {
-        return Jwts.parserBuilder()
+        return Jwts.parser()
                 .setSigningKey(getSigningKey(SECRET_KEY))
                 .build()
                 .parseClaimsJws(token)
@@ -58,21 +58,12 @@ public class JwtUtil {
 
     public String doGenerateToken(String email, long expireTime) {
         System.out.println("doGenerateToken()");
-        Claims claims2 = Jwts.claims();
-        Claims claims = Jwts.claims();
-        System.out.println("claims");
-
-        claims.put("email", email);
-
-        String jwt = Jwts.builder()
-                .setClaims(claims)
+        return Jwts.builder()
+                .claim("email", email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expireTime))
-                .signWith(getSigningKey(SECRET_KEY), SignatureAlgorithm.HS256)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
-        System.out.println("----- = ");
-        System.out.println("jwt = " + jwt);
-        return jwt;
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

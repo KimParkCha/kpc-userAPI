@@ -42,9 +42,9 @@ public class UserController {
         try {
             System.out.println("register Controller 실행");
             userService.registUser(user);
-            return new Response("success", "회원가입을 성공적으로 완료했습니다.", null);
+            return new Response(user,"success", "회원가입을 성공적으로 완료했습니다.", null, null);
         } catch (Exception e) {
-            return new Response("error", "회원가입을 하는 도중 오류가 발생했습니다.", null);
+            return new Response(null,"error", "회원가입을 하는 도중 오류가 발생했습니다.", null, null);
         }
     }
 
@@ -62,23 +62,23 @@ public class UserController {
             Cookie accessToken = cookieUtil.createCookie(JwtUtil.ACCESS_TOKEN_NAME, token);
             Cookie refreshToken = cookieUtil.createCookie(JwtUtil.REFRESH_TOKEN_NAME, refreshJwt);
 
-            System.out.println("token = " + token);
-            redisUtil.setDataExpire(refreshJwt, user.getName(), JwtUtil.REFRESH_TOKEN_VALIDATION_SECOND);
+            System.out.println("accessToken = " + accessToken.getValue());
+            System.out.println("refreshToken = " + refreshToken.getValue());
+//            redisUtil.setDataExpire(refreshJwt, user.getName(), JwtUtil.REFRESH_TOKEN_VALIDATION_SECOND);
             res.addCookie(accessToken);
             res.addCookie(refreshToken);
-
 //            return new ResponseEntity<MemberDto>("success", "로그인에 성공했습니다.", token);
-            return new Response("success", "로그인에 성공했습니다.", token);
+            return new Response(user, "success", "로그인에 성공했습니다.", accessToken.getValue(), refreshToken.getValue());
         } catch (Exception e) {
-            return new Response("error", "로그인에 실패했습니다.", e.getMessage());
+            return new Response(null,"error", "로그인 정보가 맞지 않습니다!", e.getMessage(), null);
         }
     }
 
-    @GetMapping(value = "/detailUser/{user_id}")
-    public ResponseEntity<User> getUser(@PathVariable int user_id) {
-        Long id = Long.valueOf(user_id);
-        if(userService.getUser(id).isPresent()){
-            return new ResponseEntity<User>(userService.getUser(id).get(), HttpStatus.OK);
+    @GetMapping(value = "/detailUser/{email}")
+    public ResponseEntity<User> getUser(@PathVariable String email) {
+
+        if(userService.getUserEmail(email) != null){
+            return new ResponseEntity<User>(userService.getUserEmail(email), HttpStatus.OK);
         } else{
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
