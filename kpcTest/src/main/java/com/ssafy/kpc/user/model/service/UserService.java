@@ -10,6 +10,6 @@ public interface UserService {
 
     User loginUser(String email, String password) throws Exception;
 
-    public Optional<User> getUser(Long id);
+    public User getUser(String email);
 }
 

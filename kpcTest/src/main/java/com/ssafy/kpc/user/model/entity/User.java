@@ -20,7 +20,7 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
-    @Id @GeneratedValue
+    @Id
     @Column(name = "user_id")
     private Long id;
 

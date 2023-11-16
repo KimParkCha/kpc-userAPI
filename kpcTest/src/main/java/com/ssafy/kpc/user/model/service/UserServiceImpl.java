@@ -70,8 +70,8 @@ public class UserServiceImpl implements UserService{
 
 
 
-    public Optional<User> getUser(Long id){
-        return userRepository.findById(id);
+    public User getUser(String email){
+        return userRepository.findByEmail(email);
     }
 
 }
