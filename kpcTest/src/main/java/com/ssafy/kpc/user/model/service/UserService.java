@@ -10,6 +10,7 @@ public interface UserService {
 
     User loginUser(String email, String password) throws Exception;
 
-    public User getUserEmail(String email);
+    User getUserEmail(String email);
+
 }
 
