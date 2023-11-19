@@ -4,6 +4,7 @@ import com.ssafy.kpc.user.model.entity.Salt;
 import com.ssafy.kpc.user.model.entity.User;
 import com.ssafy.kpc.user.model.repository.SaltRepository;
 import com.ssafy.kpc.user.model.repository.UserRepository;
+import com.ssafy.kpc.user.util.RedisUtil;
 import com.ssafy.kpc.user.util.SaltUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
@@ -25,15 +25,24 @@ public class UserServiceImpl implements UserService{
 
     private final SaltUtil saltUtil;
 
+    private final RedisUtil redisUtil;
+
     @Transactional
     public void registUser(User user){
         String password = user.getPassword();
         String salt = saltUtil.genSalt();
+
         log.info(salt);
         user.setSalt(new Salt(salt));
         user.setPassword(saltUtil.encodePassword(salt,password));
         validateDuplicateMember(user);
+        System.out.println("1111 = " + user.getEmail());
+        System.out.println("address = " + user.getAddress());
+        System.out.println("id = " + user.getId());
+
+
         userRepository.save(user);
+        System.out.println("2 = ");
     }
 
     private void validateDuplicateMember(User user) {
@@ -71,8 +80,11 @@ public class UserServiceImpl implements UserService{
         return userRepository.findById(userId);
     }
 
+    @Transactional(readOnly = true)
     public User getUserEmail(String email){
         return userRepository.findByEmail(email);
     }
+
+
 
 }

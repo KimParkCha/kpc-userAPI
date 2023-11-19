@@ -20,22 +20,16 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
-    @Id
+    @Id @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
-    @Column(unique = true)
-    @NotBlank
     private String name;
-    @NotBlank
+
     private String password;
 
-    @Column(unique = true)
-    @NotBlank
     private String email;
 
-    @Column(unique = true)
-    @NotBlank
     private String address;
 
     @CreationTimestamp

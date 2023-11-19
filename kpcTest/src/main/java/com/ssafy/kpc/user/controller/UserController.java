@@ -38,14 +38,14 @@ public class UserController {
 //    }
 
     @PostMapping(value = "/register")
-    public Response register(@RequestBody User user){
+    public ResponseEntity<User> register(@RequestBody User user){
         try {
             System.out.println("register Controller 실행");
             userService.registUser(user);
 
-            return new Response(user,"success", "회원가입을 성공적으로 완료했습니다.", null, null);
+            return new ResponseEntity<User>(user, HttpStatus.OK);
         } catch (Exception e) {
-            return new Response(null,"error", "회원가입을 하는 도중 오류가 발생했습니다.", null, null);
+            return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
         }
     }
 
@@ -65,9 +65,10 @@ public class UserController {
 
             System.out.println("accessToken = " + accessToken.getValue());
             System.out.println("refreshToken = " + refreshToken.getValue());
-//            redisUtil.setDataExpire(refreshJwt, user.getName(), JwtUtil.REFRESH_TOKEN_VALIDATION_SECOND);
+            redisUtil.setDataExpire(refreshJwt, user.getName(), JwtUtil.REFRESH_TOKEN_VALIDATION_SECOND);
             res.addCookie(accessToken);
             res.addCookie(refreshToken);
+            System.out.println("user : " + user.getName());
 //            return new ResponseEntity<MemberDto>("success", "로그인에 성공했습니다.", token);
             return new Response(user, "success", "로그인에 성공했습니다.", accessToken.getValue(), refreshToken.getValue());
         } catch (Exception e) {
@@ -86,9 +87,9 @@ public class UserController {
     }
 
     @PostMapping(value = "/logout")
-    public Response logout(HttpServletRequest request){
+    public ResponseEntity<Void> logout(HttpServletRequest request){
         System.out.println("로그아웃");
-        return new Response(null, "success", "로그아웃 성공", null, null);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
