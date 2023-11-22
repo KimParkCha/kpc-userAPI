@@ -65,7 +65,7 @@ public class UserController {
 
             System.out.println("accessToken = " + accessToken.getValue());
             System.out.println("refreshToken = " + refreshToken.getValue());
-            redisUtil.setDataExpire(refreshJwt, user.getName(), JwtUtil.REFRESH_TOKEN_VALIDATION_SECOND);
+//            redisUtil.setDataExpire(refreshJwt, user.getName(), JwtUtil.REFRESH_TOKEN_VALIDATION_SECOND);
             res.addCookie(accessToken);
             res.addCookie(refreshToken);
             System.out.println("user : " + user.getName());
